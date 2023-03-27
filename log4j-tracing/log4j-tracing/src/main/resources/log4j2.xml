@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} ${env:applicationName} %t %c %M %X{traceId},%X{spanId} - %m%n</Property>
+    </Properties>
+    <Appenders>
+        <SpanAppender name="spanAppender" />
+        <Console name="consoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+        <File name="fileAppender" fileName="./logs/myapp.log">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </File>
+        <File name="spanFileExportAppender" fileName="./logs/span.log">
+            <PatternLayout pattern="%m%n"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.code2learn.log4j2tracing.otel.Slf4jSpanExporter" level="info" additivity="false">
+            <AppenderRef ref="spanFileExportAppender"/>
+        </Logger>
+        <Logger name="com.code2learn.log4jtracing.application" level="info" additivity="true">
+            <AppenderRef ref="spanAppender"/>
+        </Logger>
+        <Logger name="com.code2learn.log4j2tracing.logger.SpanAppender" level="off" additivity="false" />
+        <Root level="info">
+            <AppenderRef ref="fileAppender"/>
+            <AppenderRef ref="consoleAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>

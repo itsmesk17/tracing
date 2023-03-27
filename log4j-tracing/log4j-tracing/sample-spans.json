@@ -1,0 +1,154 @@
+{
+  "spans": [
+    {
+      "attributes": {
+        "empty": true
+      },
+      "totalAttributeCount": 0,
+      "totalRecordedEvents": 0,
+      "status": {
+        "statusCode": "OK",
+        "description": ""
+      },
+      "name": "doSomething",
+      "endEpochNanos": 1677909676660911668,
+      "startEpochNanos": 1677909676658731848,
+      "parentSpanContext": {
+        "traceId": "2173c45e3c84e33e76b188b5370d0797",
+        "spanId": "6a120c44ca1a00c5",
+        "traceFlags": {
+          "sampled": true
+        },
+        "traceState": {
+          "empty": true
+        },
+        "remote": false,
+        "valid": true,
+        "traceIdBytes": "IXPEXjyE4z52sYi1Nw0Hlw==",
+        "spanIdBytes": "ahIMRMoaAMU=",
+        "sampled": true
+      },
+      "totalRecordedLinks": 0,
+      "spanContext": {
+        "traceId": "2173c45e3c84e33e76b188b5370d0797",
+        "spanId": "f9d6c8beffaca1c2",
+        "traceFlags": {
+          "sampled": true
+        },
+        "traceState": {
+          "empty": true
+        },
+        "remote": false,
+        "valid": true,
+        "traceIdBytes": "IXPEXjyE4z52sYi1Nw0Hlw==",
+        "spanIdBytes": "+dbIvv+socI=",
+        "sampled": true
+      },
+      "events": [],
+      "kind": "INTERNAL",
+      "links": [],
+      "instrumentationScopeInfo": {
+        "name": "my-app-tracer",
+        "version": null,
+        "schemaUrl": null,
+        "attributes": {
+          "empty": true
+        }
+      },
+      "instrumentationLibraryInfo": {
+        "name": "my-app-tracer",
+        "version": null,
+        "schemaUrl": null
+      },
+      "resource": {
+        "schemaUrl": null,
+        "attributes": {
+          "empty": false
+        }
+      },
+      "parentSpanId": "6a120c44ca1a00c5",
+      "traceId": "2173c45e3c84e33e76b188b5370d0797",
+      "spanId": "f9d6c8beffaca1c2"
+    },
+    {
+      "attributes": {
+        "http.scheme": "http",
+        "http.method": "GET",
+        "http.status_code": 200,
+        "http.path": "/",
+        "http.user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15",
+        "http.route": "/",
+        "mvc.controller.method": "index",
+        "http.target": "/",
+        "net.host.name": "localhost",
+        "mvc.controller.class": "MyController",
+        "net.transport": "http"
+      },
+      "totalAttributeCount": 11,
+      "totalRecordedEvents": 0,
+      "status": {
+        "statusCode": "UNSET",
+        "description": ""
+      },
+      "name": "HTTP GET",
+      "endEpochNanos": 1677909676719880601,
+      "startEpochNanos": 1677909676610728000,
+      "parentSpanContext": {
+        "traceId": "00000000000000000000000000000000",
+        "spanId": "0000000000000000",
+        "traceFlags": {
+          "sampled": false
+        },
+        "traceState": {
+          "empty": true
+        },
+        "remote": false,
+        "valid": false,
+        "traceIdBytes": "AAAAAAAAAAAAAAAAAAAAAA==",
+        "spanIdBytes": "AAAAAAAAAAA=",
+        "sampled": false
+      },
+      "totalRecordedLinks": 0,
+      "spanContext": {
+        "traceId": "2173c45e3c84e33e76b188b5370d0797",
+        "spanId": "6a120c44ca1a00c5",
+        "traceFlags": {
+          "sampled": true
+        },
+        "traceState": {
+          "empty": true
+        },
+        "remote": false,
+        "valid": true,
+        "traceIdBytes": "IXPEXjyE4z52sYi1Nw0Hlw==",
+        "spanIdBytes": "ahIMRMoaAMU=",
+        "sampled": true
+      },
+      "events": [],
+      "kind": "SERVER",
+      "links": [],
+      "instrumentationScopeInfo": {
+        "name": "org.springframework.cloud.sleuth",
+        "version": null,
+        "schemaUrl": null,
+        "attributes": {
+          "empty": true
+        }
+      },
+      "instrumentationLibraryInfo": {
+        "name": "org.springframework.cloud.sleuth",
+        "version": null,
+        "schemaUrl": null
+      },
+      "resource": {
+        "schemaUrl": null,
+        "attributes": {
+          "empty": false
+        }
+      },
+      "parentSpanId": "0000000000000000",
+      "traceId": "2173c45e3c84e33e76b188b5370d0797",
+      "spanId": "6a120c44ca1a00c5"
+    }
+  ]
+}
