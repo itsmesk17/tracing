@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "ORDER_HISTORY")
+@Table(name = "order_history")
 @Data
 public class OrderHistory {
 

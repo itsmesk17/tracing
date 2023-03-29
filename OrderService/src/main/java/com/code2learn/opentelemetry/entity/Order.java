@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "ORDER_TBL")
+@Table(name = "order_tbl")
 @Data
 public class Order {
 
