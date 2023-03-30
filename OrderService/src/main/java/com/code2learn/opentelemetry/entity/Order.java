@@ -24,7 +24,7 @@ public class Order {
     private int id;
 
     @JsonProperty("date")
-    @Column(name = "DATE")
+    @Column(name = "ORDER_DATE")
     private Date date = new Date();
 
     @JsonProperty("status")

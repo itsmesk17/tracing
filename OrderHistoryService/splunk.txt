@@ -1,0 +1,1 @@
+docker run -d -it --name splunk-otel-collector --privileged=true -p 4317:4317 oraclelinux:8 /sbin/init

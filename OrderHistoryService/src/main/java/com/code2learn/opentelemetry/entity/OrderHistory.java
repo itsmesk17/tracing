@@ -26,7 +26,7 @@ public class OrderHistory {
     private int orderId;
 
     @JsonProperty("date")
-    @Column(name = "DATE")
+    @Column(name = "ORDER_DATE")
     private Date date = new Date();
 
     @JsonProperty("status")

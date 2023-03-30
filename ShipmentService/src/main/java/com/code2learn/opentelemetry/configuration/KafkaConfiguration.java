@@ -37,7 +37,8 @@ public class KafkaConfiguration {
                 JsonDeserializer.class);
         props.put(
                 JsonDeserializer.TRUSTED_PACKAGES,
-                "com.code2learn.opentelemetry.entity");
+                "*");
+        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, "com.code2learn.opentelemetry.entity.Order");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         return new DefaultKafkaConsumerFactory<>(props);
     }
