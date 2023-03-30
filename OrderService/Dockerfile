@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:alpine
+FROM openjdk:11.0.11-jre-slim
 
 COPY target/order-service-1.0.0-SNAPSHOT.jar app.jar
 
