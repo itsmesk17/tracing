@@ -8,10 +8,14 @@ processors:
   batch:
 
 exporters:
+  otlp:
+    endpoint: host.docker.internal:4317
+    tls:
+      insecure: true
   logging:
     loglevel: debug
   jaeger:
-    endpoint: jaeger-service:14250
+    endpoint: host.docker.internal:14251
     tls:
       insecure: true
 
@@ -20,4 +24,20 @@ service:
     traces:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ logging, jaeger ]
+      exporters: [ otlp, logging, jaeger ]
+    metrics:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ otlp, logging ]
+    metrics/internal:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ otlp, logging ]
+    logs/signalfx:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ otlp, logging ]
+    logs:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ otlp, logging ]

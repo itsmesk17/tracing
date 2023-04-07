@@ -8,23 +8,13 @@
         <Console name="consoleAppender" target="SYSTEM_OUT">
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
-        <File name="fileAppender" fileName="./logs/myapp.log">
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-        </File>
-        <File name="spanFileExportAppender" fileName="./logs/span.log">
-            <PatternLayout pattern="%m%n"/>
-        </File>
     </Appenders>
     <Loggers>
-        <Logger name="com.code2learn.log4j2tracing.otel.Slf4jSpanExporter" level="info" additivity="false">
-            <AppenderRef ref="spanFileExportAppender"/>
-        </Logger>
         <Logger name="com.code2learn.opentelemetry" level="info" additivity="true">
             <AppenderRef ref="spanAppender"/>
         </Logger>
         <Logger name="com.code2learn.log4j2tracing.logger.SpanAppender" level="off" additivity="false" />
         <Root level="info">
-            <AppenderRef ref="fileAppender"/>
             <AppenderRef ref="consoleAppender"/>
         </Root>
     </Loggers>

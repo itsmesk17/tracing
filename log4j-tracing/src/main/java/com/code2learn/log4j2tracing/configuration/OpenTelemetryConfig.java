@@ -85,7 +85,7 @@ public class OpenTelemetryConfig {
 
         // Create a TracerProvider with the logging exporter
         SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
-                .addSpanProcessor(SimpleSpanProcessor.create(slf4jSpanExporter))
+//                .addSpanProcessor(SimpleSpanProcessor.create(slf4jSpanExporter))
                 .addSpanProcessor(BatchSpanProcessor.builder(otelOtlpGrpcSpanExporter).build())
                 .setResource(resource)
                 .build();

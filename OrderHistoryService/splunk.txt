@@ -1,8 +1,0 @@
-docker run -d -it --name splunk-otel-collector --privileged=true -p 4317:4317 oraclelinux:8 /sbin/init
-
-docker run -d --add-host=host.docker.internal:host-gateway -p 8080:8080 -e db.wallet.location=/wallet/ -e otel.collector.url=http://host.docker.internal:4317 -e kafka.broker.url=host.docker.internal:9092 -e applicationName=order-app -e orderHistory.service.url=http://host.docker.internal:8081/orderHistory -v /home/ubuntu/wallet:/wallet --name order-svc order-svc-img
-docker run -d --add-host=host.docker.internal:host-gateway -p 8081:8081 -e db.wallet.location=/wallet/ -e otel.collector.url=http://host.docker.internal:4317 -e applicationName=order-history-app -v /home/ubuntu/wallet:/wallet --name order-history-svc order-history-svc-img
-docker run -d --add-host=host.docker.internal:host-gateway -p 8082:8082 -e otel.collector.url=http://host.docker.internal:4317 -e kafka.broker.url=host.docker.internal:9092 -e applicationName=shipment-app -e order.service.url=http://host.docker.internal:8080/order --name shipment-svc shipment-svc-img
-
-* * * * * curl -X POST http://localhost:8080/order >> /var/log/myjob.log 2>&1
-* * * * * curl http://localhost:8080/order/1 >> /var/log/myjob.log 2>&1
