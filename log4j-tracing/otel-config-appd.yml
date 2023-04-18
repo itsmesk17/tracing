@@ -9,10 +9,10 @@ processors:
     attributes:
       - key: appdynamics.controller.account
         action: upsert
-        value: "curie202304050848454"
+        value: "earlywarning-preprod"
       - key: appdynamics.controller.host
         action: upsert
-        value: "curie202304050848454.saas.appdynamics.com"
+        value: "earlywarning-preprod.saas.appdynamics.com"
       - key: appdynamics.controller.port
         action: upsert
         value: 443
@@ -21,31 +21,31 @@ processors:
     send_batch_size: 90
 
 exporters:
-  otlp:
-    endpoint: host.docker.internal:4317
-    tls:
-      insecure: true
+#  otlp:
+#    endpoint: host.docker.internal:4317
+#    tls:
+#      insecure: true
   logging:
     loglevel: debug
+  otlphttp:
+    endpoint: "https://pdx-sls-agent-api.saas.appdynamics.com"
+    headers: {"x-api-key": "5ca40d5bf541df42af3dc20bc680cc6812d02e54382d59be183ff918bd8013d5"}
   jaeger:
     endpoint: host.docker.internal:14251
     tls:
       insecure: true
-  otlphttp:
-    endpoint: "https://curie202304050848454.saas.appdynamics.com"
-    headers: { "x-api-key": "92ff50292b0765bb0cb8479b419d9786947beb72edef30c6c1aaa927107a37e6" }
 
 service:
   pipelines:
     traces:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ otlp, logging, jaeger, otlphttp ]
+      exporters: [ otlphttp, logging, jaeger ]
     metrics:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ otlp, logging, otlphttp ]
+      exporters: [ otlphttp, logging ]
     logs:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ otlp, logging, otlphttp ]
+      exporters: [ otlphttp, logging ]
