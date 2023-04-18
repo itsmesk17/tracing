@@ -17,14 +17,10 @@ processors:
         action: upsert
         value: 443
   batch:
-    timeout: 30s
-    send_batch_size: 90
+#    timeout: 30s
+#    send_batch_size: 90
 
 exporters:
-  otlp:
-    endpoint: host.docker.internal:4317
-    tls:
-      insecure: true
   logging:
     loglevel: debug
   jaeger:
@@ -32,20 +28,20 @@ exporters:
     tls:
       insecure: true
   otlphttp:
-    endpoint: "https://curie202304050848454.saas.appdynamics.com"
+    endpoint: "https://pdx-sls-agent-api.saas.appdynamics.com"
     headers: { "x-api-key": "92ff50292b0765bb0cb8479b419d9786947beb72edef30c6c1aaa927107a37e6" }
 
 service:
   pipelines:
     traces:
       receivers: [ otlp ]
-      processors: [ batch ]
-      exporters: [ otlp, logging, jaeger, otlphttp ]
+      processors: [ resource, batch ]
+      exporters: [ logging, otlphttp, jaeger ]
     metrics:
       receivers: [ otlp ]
-      processors: [ batch ]
-      exporters: [ otlp, logging, otlphttp ]
+      processors: [ resource, batch ]
+      exporters: [ logging ]
     logs:
       receivers: [ otlp ]
-      processors: [ batch ]
-      exporters: [ otlp, logging, otlphttp ]
+      processors: [ resource, batch ]
+      exporters: [ logging, otlphttp ]
