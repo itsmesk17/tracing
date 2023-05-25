@@ -10,9 +10,9 @@ docker build --compress -t order-svc-img .
 docker build --compress -t order-history-svc-img .
 docker build --compress -t shipment-svc-img .
 
-docker run -d --add-host=host.docker.internal:host-gateway -p 8080:8080 -e db.wallet.location=/wallet/ -e otel.collector.url=http://host.docker.internal:4319 -e kafka.broker.url=host.docker.internal:9092 -e applicationName=order-app -e orderHistory.service.url=http://host.docker.internal:8081/orderHistory -v /home/ubuntu/wallet:/wallet --name order-svc --restart always order-svc-img
 docker run -d --add-host=host.docker.internal:host-gateway -p 8081:8081 -e db.wallet.location=/wallet/ -e otel.collector.url=http://host.docker.internal:4319 -e applicationName=order-history-app -v /home/ubuntu/wallet:/wallet --name order-history-svc --restart always order-history-svc-img
-docker run -d --add-host=host.docker.internal:host-gateway -p 8082:8082 -e otel.collector.url=http://host.docker.internal:4319 -e kafka.broker.url=host.docker.internal:9092 -e applicationName=shipment-app -e order.service.url=http://host.docker.internal:8080/order --name shipment-svc --restart always shipment-svc-img
+docker run -d --add-host=host.docker.internal:host-gateway -p 8080:8080 -e db.wallet.location=/wallet/ -e otel.collector.url=http://host.docker.internal:4319 -e kafka.broker.url=158.101.9.170:30092 -e applicationName=order-app -e orderHistory.service.url=http://host.docker.internal:8081/orderHistory -v /home/ubuntu/wallet:/wallet --name order-svc --restart always order-svc-img
+docker run -d --add-host=host.docker.internal:host-gateway -p 8082:8082 -e otel.collector.url=http://host.docker.internal:4319 -e kafka.broker.url=158.101.9.170:30092 -e applicationName=shipment-app -e order.service.url=http://host.docker.internal:8080/order --name shipment-svc --restart always shipment-svc-img
 
 * * * * * curl -X POST http://localhost:8080/order >> /var/log/myjob.log 2>&1
 * * * * * curl http://localhost:8080/order/1 >> /var/log/myjob.log 2>&1

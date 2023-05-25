@@ -21,10 +21,6 @@ processors:
     send_batch_size: 90
 
 exporters:
-#  otlp:
-#    endpoint: host.docker.internal:4317
-#    tls:
-#      insecure: true
   logging:
     loglevel: debug
   otlphttp:
@@ -39,13 +35,5 @@ service:
   pipelines:
     traces:
       receivers: [ otlp ]
-      processors: [ batch ]
+      processors: [ resource, batch ]
       exporters: [ otlphttp, logging, jaeger ]
-    metrics:
-      receivers: [ otlp ]
-      processors: [ batch ]
-      exporters: [ otlphttp, logging ]
-    logs:
-      receivers: [ otlp ]
-      processors: [ batch ]
-      exporters: [ otlphttp, logging ]
