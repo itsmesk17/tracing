@@ -20,8 +20,8 @@ docker build --compress -t order-history-svc-img .
 docker build --compress -t shipment-svc-img .
 
 docker run -d --add-host=host.docker.internal:host-gateway -p 8081:8081 -e db.wallet.location=/wallet/ -e otel.collector.url=http://host.docker.internal:4317 -e applicationName=order-history-app -e groupName=otel-tracing -v /home/ubuntu/wallet:/wallet --name order-history-svc --restart on-failure order-history-svc-img
-docker run -d --add-host=host.docker.internal:host-gateway -p 8080:8080 -e db.wallet.location=/wallet/ -e otel.collector.url=http://host.docker.internal:4317 -e kafka.broker.url=158.101.9.170:30092 -e applicationName=order-app -e groupName=otel-tracing -e orderHistory.service.url=http://host.docker.internal:8081/orderHistory -v /home/ubuntu/wallet:/wallet --name order-svc --restart on-failure order-svc-img
-docker run -d --add-host=host.docker.internal:host-gateway -p 8082:8082 -e otel.collector.url=http://host.docker.internal:4317 -e kafka.broker.url=158.101.9.170:30092 -e applicationName=shipment-app -e groupName=otel-tracing -e order.service.url=http://host.docker.internal:8080/order --name shipment-svc --restart on-failure shipment-svc-img
+docker run -d --add-host=host.docker.internal:host-gateway -p 8080:8080 -e db.wallet.location=/wallet/ -e otel.collector.url=http://host.docker.internal:4317 -e kafka.broker.url=158.101.9.170:30092 -e applicationName=order-app -e groupName=otel-tracing1 -e orderHistory.service.url=http://host.docker.internal:8081/orderHistory -v /home/ubuntu/wallet:/wallet --name order-svc --restart on-failure order-svc-img
+docker run -d --add-host=host.docker.internal:host-gateway -p 8082:8082 -e otel.collector.url=http://host.docker.internal:4317 -e kafka.broker.url=158.101.9.170:30092 -e applicationName=shipment-app -e groupName=otel-tracing2 -e order.service.url=http://host.docker.internal:8080/order --name shipment-svc --restart on-failure shipment-svc-img
 
 * * * * * curl -X POST http://localhost:8080/order >> /var/log/myjob.log 2>&1
 * * * * * curl http://localhost:8080/order/1 >> /var/log/myjob.log 2>&1
