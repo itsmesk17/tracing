@@ -35,7 +35,7 @@ while [ $(date +%s) -lt $end_time ]; do
 done
 
 truncate -s 0 /var/lib/docker/containers/**/*.log
-truncate -s 0 /var/lib/docker/containers/**/*.log
+truncate -s 0 /var/log/myapp/*.log
 
 # Optional: Add any cleanup or final steps after the loop
 echo "Task completed."

@@ -1,18 +1,31 @@
+Add this rule to allow container to connect to host port
+iptables -I INPUT 1 -s 172.17.0.1/16 -j ACCEPT
+
 docker run -d -it --name splunk-otel-collector --privileged=true -p 4319:4317 oraclelinux:8 /sbin/init
 
-docker run --add-host=host.docker.internal:host-gateway --name my-zookeeper -p 2181:2181 -e ZOOKEEPER_CLIENT_PORT=2181 -e ZOOKEEPER_TICK_TIME=2000 -d --restart always confluentinc/cp-zookeeper:latest
-docker run --add-host=host.docker.internal:host-gateway --name kafka -p 9092:9092 -e KAFKA_BROKER_ID=1 -e KAFKA_ZOOKEEPER_CONNECT=host.docker.internal:2181 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://129.153.125.223:9092 -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 -e KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT -d --restart always confluentinc/cp-kafka:latest
+docker run --add-host=host.docker.internal:host-gateway --name my-zookeeper -p 2181:2181 -e ZOOKEEPER_CLIENT_PORT=2181 -e ZOOKEEPER_TICK_TIME=2000 -d --restart on-failure confluentinc/cp-zookeeper:latest
+docker run --add-host=host.docker.internal:host-gateway --name kafka -p 9092:9092 -e KAFKA_BROKER_ID=1 -e KAFKA_ZOOKEEPER_CONNECT=host.docker.internal:2181 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://129.153.125.223:9092 -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 -e KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT -d --restart on-failure confluentinc/cp-kafka:latest
 
-docker run -d --add-host=host.docker.internal:host-gateway --name my-otel-collector -p 4317:4317 -v /home/ubuntu/otel-config.yml:/etc/otel-collector-config.yml -v /var/log/myapp:/var/log/myapp --restart always otel/opentelemetry-collector:0.72.0 --config=/etc/otel-collector-config.yml
-docker run -d --add-host=host.docker.internal:host-gateway --name my-jaeger -p 16686:16686 -p 14251:14250 --restart always jaegertracing/all-in-one:latest
+docker run -d --add-host=host.docker.internal:host-gateway --name my-otel-collector -p 4317:4317 -v /home/ubuntu/otel-config.yml:/etc/otel-collector-config.yml -v /var/log/myapp:/var/log/myapp --restart on-failure otel/opentelemetry-collector:latest --config=/etc/otel-collector-config.yml
+docker run -d --add-host=host.docker.internal:host-gateway --name my-jaeger -p 16686:16686 -p 14251:14250 --restart on-failure jaegertracing/all-in-one:latest
+
+docker run -d --add-host=host.docker.internal:host-gateway --name my-elasticsearch -p 9200:9200 -p 9300:9300 -e cluster.name=jaeger-cluster -e discovery.type=single-node -e xpack.security.enabled=false -e bootstrap.memory_lock=true -e "ES_JAVA_OPTS=-Xms1024m -Xmx2048m" -v esdata:/usr/share/elasticsearch/data --restart on-failure docker.elastic.co/elasticsearch/elasticsearch:8.8.2
+
+docker run -d --add-host=host.docker.internal:host-gateway --name my-jaeger-collector -p 9411:9411 -p 14267:14267 -p 14268:14268 -p 14269:14269 -p 14250:14250 -e SPAN_STORAGE_TYPE=elasticsearch jaegertracing/jaeger-collector --es.server-urls=http://host.docker.internal:9200 --es.num-shards=1 --es.num-replicas=0 --log-level=error
+docker run -d --add-host=host.docker.internal:host-gateway --name my-jaeger-agent -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778 -e SPAN_STORAGE_TYPE=elasticsearch --restart on-failure jaegertracing/jaeger-agent ["--collector.host-port=host.docker.internal:14267"]
+docker run -d --add-host=host.docker.internal:host-gateway --name my-jaeger-query -p 16686:16686 -p 16687:16687 -e no_proxy=localhost -e SPAN_STORAGE_TYPE=elasticsearch --restart on-failure jaegertracing/jaeger-query [ "--es.server-urls=http://host.docker.internal:9200", "--span-storage.type=elasticsearch", "--log-level=debug"]
 
 docker build --compress -t order-svc-img .
 docker build --compress -t order-history-svc-img .
 docker build --compress -t shipment-svc-img .
 
-docker run -d --add-host=host.docker.internal:host-gateway -p 8081:8081 -e db.wallet.location=/wallet/ -e otel.collector.url=http://host.docker.internal:4317 -e applicationName=order-history-app -v /home/ubuntu/wallet:/wallet --name order-history-svc --restart always order-history-svc-img
-docker run -d --add-host=host.docker.internal:host-gateway -p 8080:8080 -e db.wallet.location=/wallet/ -e otel.collector.url=http://host.docker.internal:4317 -e kafka.broker.url=158.101.9.170:30092 -e applicationName=order-app -e orderHistory.service.url=http://host.docker.internal:8081/orderHistory -v /home/ubuntu/wallet:/wallet --name order-svc --restart always order-svc-img
-docker run -d --add-host=host.docker.internal:host-gateway -p 8082:8082 -e otel.collector.url=http://host.docker.internal:4317 -e kafka.broker.url=158.101.9.170:30092 -e applicationName=shipment-app -e order.service.url=http://host.docker.internal:8080/order --name shipment-svc --restart always shipment-svc-img
+docker run -d --add-host=host.docker.internal:host-gateway -p 8081:8081 -e db.wallet.location=/wallet/ -e otel.collector.url=http://host.docker.internal:4317 -e applicationName=order-history-app -e groupName=otel-tracing -v /home/ubuntu/wallet:/wallet --name order-history-svc --restart on-failure order-history-svc-img
+docker run -d --add-host=host.docker.internal:host-gateway -p 8080:8080 -e db.wallet.location=/wallet/ -e otel.collector.url=http://host.docker.internal:4317 -e kafka.broker.url=158.101.9.170:30092 -e applicationName=order-app -e groupName=otel-tracing -e orderHistory.service.url=http://host.docker.internal:8081/orderHistory -v /home/ubuntu/wallet:/wallet --name order-svc --restart on-failure order-svc-img
+docker run -d --add-host=host.docker.internal:host-gateway -p 8082:8082 -e otel.collector.url=http://host.docker.internal:4317 -e kafka.broker.url=158.101.9.170:30092 -e applicationName=shipment-app -e groupName=otel-tracing -e order.service.url=http://host.docker.internal:8080/order --name shipment-svc --restart on-failure shipment-svc-img
 
 * * * * * curl -X POST http://localhost:8080/order >> /var/log/myjob.log 2>&1
 * * * * * curl http://localhost:8080/order/1 >> /var/log/myjob.log 2>&1
+
+#clouder
+docker pull cloudera/quickstart:latest
+docker run --hostname=quickstart.cloudera --privileged=true -i -t -d -p 80:80 -p 8888:8888 cloudera/quickstart:latest /usr/bin/docker-quickstart
