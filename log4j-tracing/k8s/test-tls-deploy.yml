@@ -1,0 +1,94 @@
+#test-tls-deploy.yml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: test
+  name: test-tls-deploy
+  labels:
+    app: test
+spec:
+  selector:
+    matchLabels:
+      app: test
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+        - name: test
+          image: nginx
+          ports:
+            - containerPort: 80
+              name: test
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "100m"
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
+      affinity:
+        podAntiAffinity: ## spread pods across nodes
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - test
+              topologyKey: "kubernetes.io/hostname"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: test
+  name: test-tls-service
+  labels:
+    app: test
+spec:
+  selector:
+    app: test
+  type: NodePort
+  ports:
+    - port: 80 ## match with ingress
+      targetPort: 80 ## match with deployment
+      protocol: TCP
+      name: test
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: test
+  name: test-tls-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - www.yourwebappdomain.tk
+      secretName: test-tls-secret
+  rules:
+    - host: www.yourwebappdomain.tk
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: test-tls-service
+                port:
+                  number: 80
+

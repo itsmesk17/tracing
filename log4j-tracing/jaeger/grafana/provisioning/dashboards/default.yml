@@ -1,0 +1,17 @@
+apiVersion: 1
+
+providers:
+  - name: dashboards    # A uniquely identifiable name for the provider
+    type: file
+    updateIntervalSeconds: 30
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: true
+  - name: 'OpenTelemetry Demo'
+    orgId: 1
+    folder: 'Demo'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/demo
