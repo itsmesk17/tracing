@@ -57,19 +57,6 @@ services:
     depends_on:
       - els
       - jaeger-collector
-  jaeger-query:
-    image: jaegertracing/jaeger-query:latest
-    ports:
-      - 16686:16686
-      - 16687:16687
-    depends_on:
-      - els
-      - jaeger-collector
-    restart: unless-stopped
-    container_name: jaeger-query
-    environment:
-      SPAN_STORAGE_TYPE: "elasticsearch"
-    command: ["--span-storage.type=elasticsearch", "--es.server-urls=http://els:9200"]
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
@@ -129,3 +116,18 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
+  jaeger-query:
+    image: jaegertracing/jaeger-query:latest
+    ports:
+      - 16686:16686
+      - 16687:16687
+    depends_on:
+      - els
+      - jaeger-collector
+      - prometheus
+    restart: unless-stopped
+    container_name: jaeger-query
+    environment:
+      SPAN_STORAGE_TYPE: "elasticsearch"
+      METRICS_STORAGE_TYPE: "prometheus"
+    command: ["--span-storage.type=elasticsearch", "--es.server-urls=http://els:9200", "--prometheus.server-url=http://prometheus:9090", "--prometheus.query.support-spanmetrics-connector=true"]
