@@ -3,6 +3,22 @@ receivers:
     protocols:
       grpc:
       http:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: "applicationMetricsReader"
+          scrape_interval: 5s
+          metrics_path: '/actuator/prometheus'
+          static_configs:
+            - targets: [ "152.70.149.143:8080" ]
+              labels:
+                application: 'OrderApp'
+            - targets: [ "152.70.149.143:8081" ]
+              labels:
+                application: 'OrderHistoryApp'
+            - targets: [ "152.70.149.143:8082" ]
+              labels:
+                application: 'ShipmentApp'
 
 processors:
   batch:
@@ -29,7 +45,7 @@ service:
       processors: [ batch ]
       exporters: [ logging, jaeger ]
     metrics:
-      receivers: [ otlp ]
+      receivers: [ otlp, prometheus ]
       processors: [ batch ]
       exporters: [ logging, otlphttp/prometheus ]
     logs:
