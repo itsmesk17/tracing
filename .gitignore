@@ -1,6 +1,3 @@
 **/.idea/
 **/target/
 **/logs/
-**/wallet
-**/esdata
-**/eslog

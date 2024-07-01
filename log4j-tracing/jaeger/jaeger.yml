@@ -102,6 +102,7 @@ services:
       - --enable-feature=otlp-write-receiver
     volumes:
       - ./prometheus-config.yaml:/etc/prometheus/prometheus-config.yaml
+      - ./prometheus-data:/prometheus
     deploy:
       resources:
         limits:
@@ -134,4 +135,4 @@ services:
     environment:
       SPAN_STORAGE_TYPE: "elasticsearch"
       METRICS_STORAGE_TYPE: "prometheus"
-    command: ["--span-storage.type=elasticsearch", "--es.server-urls=http://els:9200", "--prometheus.server-url=http://prometheus:9090", "--prometheus.query.support-spanmetrics-connector=true"]
+    command: ["--span-storage.type=elasticsearch", "--es.server-urls=http://els:9200", "--prometheus.server-url=http://prometheus:9090"]
