@@ -10,16 +10,16 @@ receivers:
           scrape_interval: 5s
           metrics_path: '/actuator/prometheus'
           static_configs:
-            - targets: [ "q6c470c96n.ews.int:8080" ]
+            - targets: [ "152.70.149.143:8080" ]
               labels:
                 application: 'OrderApp'
-            - targets: [ "q6c470c96n.ews.int:8081" ]
+            - targets: [ "152.70.149.143:8081" ]
               labels:
                 application: 'OrderHistoryApp'
-            - targets: [ "q6c470c96n.ews.int:8082" ]
+            - targets: [ "152.70.149.143:8082" ]
               labels:
                 application: 'ShipmentApp'
-            - targets: [ "q6c470c96n.ews.int:8083" ]
+            - targets: [ "152.70.149.143:8083" ]
               labels:
                 application: 'GreetingApp'
 
