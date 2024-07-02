@@ -2,7 +2,7 @@
   <configuration default="false" name="OrderHistoryApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
     <module name="order-history-service" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.code2learn.opentelemetry.OrderHistoryApplication" />
-    <option name="VM_PARAMETERS" value="-Ddb.wallet.location=$PROJECT_DIR$/../wallet -Dotel.collector.url=http://152.70.149.143:4317 -DapplicationName=order-history-app -DgroupName=otel-tracing" />
+    <option name="VM_PARAMETERS" value="-Dotel.collector.url=http://localhost:4317 -DapplicationName=order-history-app -DgroupName=otel-tracing -Ddb.url=jdbc:mysql://localhost:3306/mySchema -Ddb.user=root -Ddb.password=secret" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

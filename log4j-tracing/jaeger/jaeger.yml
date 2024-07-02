@@ -67,8 +67,6 @@ services:
      - ZOOKEEPER_CLIENT_PORT=2181
      - ZOOKEEPER_TICK_TIME=2000
     restart: unless-stopped
-    volumes:
-      - ./zoo:/var/lib/zookeeper
   kafka:
     image: confluentinc/cp-kafka:latest
     restart: unless-stopped
@@ -86,8 +84,6 @@ services:
       - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
     depends_on:
       - zookeeper
-    volumes:
-      - ./broker:/var/lib/kafka
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -170,6 +166,9 @@ services:
       - OTEL_LOGS_EXPORTER=otlp
       - OTEL_TRACES_SAMPLER=always_on
       - "JAVA_TOOL_OPTIONS=-javaagent:/agent/opentelemetry-javaagent.jar"
+    depends_on:
+      - mysql
+      - otel-collector
   order-history-service:
     build: ../../OrderHistoryService/
     container_name: order-history-service
@@ -193,7 +192,10 @@ services:
       - OTEL_METRICS_EXPORTER=otlp
       - OTEL_LOGS_EXPORTER=otlp
       - OTEL_TRACES_SAMPLER=always_on
-      - "JAVA_TOOL_OPTIONS=-javaagent:/agent/opentelemetry-javaagent.jar"
+#      - "JAVA_TOOL_OPTIONS=-javaagent:/agent/opentelemetry-javaagent.jar"
+    depends_on:
+      - mysql
+      - otel-collector
   order-service:
     build: ../../OrderService/
     container_name: order-service
@@ -219,7 +221,12 @@ services:
       - OTEL_METRICS_EXPORTER=otlp
       - OTEL_LOGS_EXPORTER=otlp
       - OTEL_TRACES_SAMPLER=always_on
-      - "JAVA_TOOL_OPTIONS=-javaagent:/agent/opentelemetry-javaagent.jar"
+#      - "JAVA_TOOL_OPTIONS=-javaagent:/agent/opentelemetry-javaagent.jar"
+    depends_on:
+      - mysql
+      - kafka
+      - otel-collector
+      - order-history-service
   shipment-service:
     build: ../../ShipmentService/
     container_name: shipment-service
@@ -242,4 +249,7 @@ services:
       - OTEL_METRICS_EXPORTER=otlp
       - OTEL_LOGS_EXPORTER=otlp
       - OTEL_TRACES_SAMPLER=always_on
-      - "JAVA_TOOL_OPTIONS=-javaagent:/agent/opentelemetry-javaagent.jar"
+#      - "JAVA_TOOL_OPTIONS=-javaagent:/agent/opentelemetry-javaagent.jar"
+    depends_on:
+      - kafka
+      - otel-collector
