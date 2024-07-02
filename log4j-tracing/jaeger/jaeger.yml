@@ -36,6 +36,8 @@ services:
       - "14268:14268"
       - "14269:14269"
       - "9411:9411"
+      - "24317:4317"
+      - "24318:4318"
     depends_on:
       - els
     container_name: jaeger-collector
@@ -43,9 +45,10 @@ services:
     restart: unless-stopped
     environment:
       - SPAN_STORAGE_TYPE=elasticsearch
+      - COLLECTOR_OTLP_ENABLED=true
     command: ["--es.num-shards=1", "--es.num-replicas=0", "--es.server-urls=http://els:9200"]
   otel-collector:
-    image: otel/opentelemetry-collector:latest
+    image: otel/opentelemetry-collector:0.72.0
     command: [ "--config=/etc/otel-collector-config.yml" ]
     volumes:
       - ./otel-config.yml:/etc/otel-collector-config.yml
