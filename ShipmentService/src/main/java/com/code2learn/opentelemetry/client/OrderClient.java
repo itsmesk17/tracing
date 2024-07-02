@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,6 @@ public class OrderClient {
     private String baseUrl;
 
 
-    @NewSpan(value = "updateOrder")
     public String updateOrder(Order order) {
         LOGGER.info("Updating Order status to shipped for Order Id {}", order.getId());
         order.setDate(new Date());

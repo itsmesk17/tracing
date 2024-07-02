@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -29,7 +28,6 @@ public class ShipmentListener {
     }
 
     @KafkaListener(topics = "orderTopic", groupId = "shipmentGrp")
-    @NewSpan("shipOrder")
     public void listenWithHeaders(
             @Payload Order order,
             @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {

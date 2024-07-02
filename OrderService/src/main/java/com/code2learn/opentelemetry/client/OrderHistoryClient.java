@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -31,7 +30,6 @@ public class OrderHistoryClient {
     @Value("${orderHistoryClient.baseUrl}")
     private String baseUrl;
 
-    @NewSpan(value = "getHistory")
     public List<OrderHistory> getHistory(long orderId) {
         LOGGER.info("Fetching Order History Details With Order Id {}", orderId);
         String url = String.format("%s/%d", baseUrl, orderId);
@@ -40,7 +38,6 @@ public class OrderHistoryClient {
         return orderHistory.getBody();
     }
 
-    @NewSpan(value = "saveHistory")
     public OrderHistory saveHistory(Order order) {
         LOGGER.info("Create a New Order History Details for Order Id {}", order.getId());
         String url = String.format("%s", baseUrl);

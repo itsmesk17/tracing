@@ -3,7 +3,7 @@ version: "3.8"
 services:
   els:
     image: elasticsearch:7.17.22
-    restart: on-failure
+    restart: unless-stopped
     container_name: els
     hostname: els
     environment:
@@ -20,6 +20,7 @@ services:
       - ./eslog:/usr/share/elasticsearch/logs
   kibana:
     image: kibana:7.17.22
+    restart: unless-stopped
     ports:
       - "5601:5601"
     environment:
@@ -44,7 +45,7 @@ services:
       - SPAN_STORAGE_TYPE=elasticsearch
     command: ["--es.num-shards=1", "--es.num-replicas=0", "--es.server-urls=http://els:9200"]
   otel-collector:
-    image: otel/opentelemetry-collector:0.72.0
+    image: otel/opentelemetry-collector:latest
     command: [ "--config=/etc/otel-collector-config.yml" ]
     volumes:
       - ./otel-config.yml:/etc/otel-collector-config.yml
@@ -65,10 +66,10 @@ services:
     environment:
      - ZOOKEEPER_CLIENT_PORT=2181
      - ZOOKEEPER_TICK_TIME=2000
-    restart: on-failure
+    restart: unless-stopped
   kafka:
     image: confluentinc/cp-kafka:latest
-    restart: on-failure
+    restart: unless-stopped
     container_name: kafka
     hostname: kafka
     ports:
@@ -108,6 +109,7 @@ services:
   grafana:
     image: grafana/grafana
     container_name: grafana
+    restart: unless-stopped
     volumes:
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
@@ -130,4 +132,33 @@ services:
     environment:
       SPAN_STORAGE_TYPE: "elasticsearch"
       METRICS_STORAGE_TYPE: "prometheus"
-    command: ["--span-storage.type=elasticsearch", "--es.server-urls=http://els:9200", "--prometheus.server-url=http://prometheus:9090", "--prometheus.query.support-spanmetrics-connector=true"]
+    command: ["--span-storage.type=elasticsearch", "--es.server-urls=http://els:9200", "--prometheus.server-url=http://prometheus:9090"]
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=mySchema
+  greeting-service:
+    build: ../../GreetingService/
+    container_name: greeting-service
+    ports:
+      - 8083:8083
+    volumes:
+      - ./agent:/agent
+    environment:
+      - applicationName=GreetingApp
+      - OTEL_SERVICE_NAME=GreetingApp
+      - OTEL_LOG_LEVEL=debug
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://otel-collector:4317
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=otlp
+      - OTEL_LOGS_EXPORTER=otlp
+      - OTEL_TRACES_SAMPLER=always_on
+      - JAVA_TOOL_OPTIONS=-javaagent:/agent/opentelemetry-javaagent.jar
+
