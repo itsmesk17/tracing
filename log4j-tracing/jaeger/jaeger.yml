@@ -155,12 +155,12 @@ services:
     environment:
       - applicationName=GreetingApp
       - groupName=otel-tracing
-      - otel.collector.url=http://otel-collector:4317
+      - otel.collector.url=http://152.70.149.143:4317
       - OTEL_SERVICE_NAME=GreetingApp
       - OTEL_LOG_LEVEL=debug
-      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4317
-      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-collector:4317
-      - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://152.70.149.143:4317
+      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://152.70.149.143:4317
+      - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://152.70.149.143:4317
       - OTEL_TRACES_EXPORTER=otlp
       - OTEL_METRICS_EXPORTER=otlp
       - OTEL_LOGS_EXPORTER=otlp
@@ -179,15 +179,15 @@ services:
     environment:
       - applicationName=OrderHistoryApp
       - groupName=otel-tracing
-      - otel.collector.url=http://otel-collector:4317
+      - otel.collector.url=http://152.70.149.143:4317
       - db.url=jdbc:mysql://mysql:3306/mySchema
       - db.user=root
       - db.password=secret
       - OTEL_SERVICE_NAME=OrderHistoryApp
       - OTEL_LOG_LEVEL=debug
-      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4317
-      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-collector:4317
-      - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://152.70.149.143:4317
+      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://152.70.149.143:4317
+      - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://152.70.149.143:4317
       - OTEL_TRACES_EXPORTER=otlp
       - OTEL_METRICS_EXPORTER=otlp
       - OTEL_LOGS_EXPORTER=otlp
@@ -206,7 +206,7 @@ services:
     environment:
       - applicationName=OrderApp
       - groupName=otel-tracing
-      - otel.collector.url=http://otel-collector:4317
+      - otel.collector.url=http://152.70.149.143:4317
       - db.url=jdbc:mysql://mysql:3306/mySchema
       - db.user=root
       - db.password=secret
@@ -214,9 +214,9 @@ services:
       - orderHistory.service.url=http://order-history-service:8081/orderHistory
       - OTEL_SERVICE_NAME=OrderApp
       - OTEL_LOG_LEVEL=debug
-      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4317
-      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-collector:4317
-      - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://152.70.149.143:4317
+      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://152.70.149.143:4317
+      - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://152.70.149.143:4317
       - OTEL_TRACES_EXPORTER=otlp
       - OTEL_METRICS_EXPORTER=otlp
       - OTEL_LOGS_EXPORTER=otlp
@@ -237,14 +237,14 @@ services:
     environment:
       - applicationName=ShipmentApp
       - groupName=otel-tracing
-      - otel.collector.url=http://otel-collector:4317
+      - otel.collector.url=http://152.70.149.143:4317
       - kafka.broker.url=kafka:9092
       - order.service.url=http://order-service:8080/order
       - OTEL_SERVICE_NAME=ShipmentApp
       - OTEL_LOG_LEVEL=debug
-      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4317
-      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-collector:4317
-      - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://152.70.149.143:4317
+      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://152.70.149.143:4317
+      - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://152.70.149.143:4317
       - OTEL_TRACES_EXPORTER=otlp
       - OTEL_METRICS_EXPORTER=otlp
       - OTEL_LOGS_EXPORTER=otlp

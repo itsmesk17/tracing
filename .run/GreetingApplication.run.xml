@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="GreetingApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <module name="GreetingService" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.code2learn.opentelemetry.GreetingApplication" />
+    <option name="VM_PARAMETERS" value="-DapplicationName=GreetingApp -DgroupName=otel" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

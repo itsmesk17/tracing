@@ -54,8 +54,8 @@ service:
     metrics:
       receivers: [ otlp, prometheus ]
       processors: [ batch ]
-      exporters: [ logging, otlphttp/prometheus ]
+      exporters: [ otlphttp/prometheus ]
     logs:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ logging , otlp/elasticsearch ]
+      exporters: [ otlp/elasticsearch ]
