@@ -252,4 +252,4 @@ services:
 ##      - "JAVA_TOOL_OPTIONS=-javaagent:/agent/opentelemetry-javaagent.jar"
 #    depends_on:
 #      - kafka
-#      - otel-collector
+#      - otel-collector4
