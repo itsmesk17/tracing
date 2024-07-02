@@ -3,7 +3,7 @@ version: "3.8"
 services:
   els:
     image: elasticsearch:7.17.22
-    restart: unless-stopped
+    restart: on-failure
     container_name: els
     hostname: els
     environment:
@@ -67,6 +67,8 @@ services:
      - ZOOKEEPER_CLIENT_PORT=2181
      - ZOOKEEPER_TICK_TIME=2000
     restart: unless-stopped
+    volumes:
+      - ./zoo:/var/lib/zookeeper
   kafka:
     image: confluentinc/cp-kafka:latest
     restart: unless-stopped
@@ -84,6 +86,8 @@ services:
       - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
     depends_on:
       - zookeeper
+    volumes:
+      - ./broker:/var/lib/kafka
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -99,6 +103,7 @@ services:
       - --enable-feature=otlp-write-receiver
     volumes:
       - ./prometheus-config.yaml:/etc/prometheus/prometheus-config.yaml
+      - ./prometheus-data:/prometheus
     deploy:
       resources:
         limits:
@@ -137,6 +142,8 @@ services:
     image: mysql:latest
     container_name: mysql
     restart: unless-stopped
+    volumes:
+      - mysql-data:/var/lib/mysql
     ports:
       - 3306:3306
     environment:

@@ -1,6 +1,9 @@
 **/.idea/
 **/target/
 **/logs/
-**/wallet
-**/esdata
-**/eslog
+**/esdata/
+**/eslog/
+**/broker/
+**/zoo/
+**/mysql-data
+**/prometheus-data
