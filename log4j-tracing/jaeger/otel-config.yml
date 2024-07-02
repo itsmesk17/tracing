@@ -19,6 +19,9 @@ receivers:
             - targets: [ "152.70.149.143:8082" ]
               labels:
                 application: 'ShipmentApp'
+            - targets: [ "152.70.149.143:8083" ]
+              labels:
+                application: 'GreetingApp'
 
 processors:
   batch:
@@ -28,12 +31,16 @@ processors:
 exporters:
   logging:
     loglevel: debug
-  jaeger:
+  otlp/jaeger:
     endpoint: jaeger-collector:14250
     tls:
       insecure: true
   otlphttp/prometheus:
     endpoint: "http://prometheus:9090/api/v1/otlp"
+    tls:
+      insecure: true
+  otlp/elasticsearch:
+    endpoint: els:9200
     tls:
       insecure: true
 #  prometheus:
@@ -43,7 +50,7 @@ service:
     traces:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ logging, jaeger ]
+      exporters: [ logging, otlp/jaeger ]
     metrics:
       receivers: [ otlp, prometheus ]
       processors: [ batch ]
@@ -51,4 +58,4 @@ service:
     logs:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ logging ]
+      exporters: [ logging , otlp/elasticsearch ]

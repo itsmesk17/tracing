@@ -10,10 +10,6 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="com.code2learn.opentelemetry" level="info" additivity="true">
-            <AppenderRef ref="spanAppender"/>
-        </Logger>
-        <Logger name="com.code2learn.log4j2tracing.logger.SpanAppender" level="off" additivity="false" />
         <Root level="info">
             <AppenderRef ref="consoleAppender"/>
         </Root>
